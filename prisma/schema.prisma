@@ -70,13 +70,14 @@ model Lesson {
 }
 
 model Quiz {
-  id        Int      @id @default(autoincrement())
-  title     String
+  lessonId  Int      @id   // lessonId is now the primary key of Quiz
+  marks     Int?    
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  lessonId  Int      @unique
   lesson    Lesson   @relation(fields: [lessonId], references: [id])
   questions Question[]
+
+  @@unique([lessonId]) // Ensure it's unique and a one-to-one relationship
 }
 
 model Question {
@@ -84,11 +85,11 @@ model Question {
   text      String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  quizId    Int
-  quiz      Quiz      @relation(fields: [quizId], references: [id])
+  lessonId  Int
+  quiz      Quiz      @relation(fields: [lessonId], references: [lessonId])
   options   Option[]
 
-  @@index([quizId])
+  @@index([lessonId])
 }
 
 model Option {

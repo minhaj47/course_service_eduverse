@@ -1,8 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prismaClient');
 
 module.exports = {
-  // Create a new course
+  
   createCourse: async (req, res) => {
     try {
       const { title, description, price, coverPhotoUrl, level, instructorId } = req.body;
@@ -29,7 +28,7 @@ module.exports = {
       const { title, description, price, coverPhotoUrl, level } = req.body;
       const updatedCourse = await prisma.course.update({
         where: { id: Number(id) },
-        data: { title, description, price, coverPhotoUrl, level }
+        data: { title, description, price, coverPhotoUrl, level}
       });
       res.json(updatedCourse);
     } catch (error) {
@@ -45,6 +44,7 @@ module.exports = {
         where: { id: Number(id) }
       });
       res.status(204).send();
+      // res.status(200).json({"message": "Course Deleted"});
     } catch (error) {
       res.status(500).json({ message: 'Error deleting course', error });
     }
@@ -65,7 +65,11 @@ module.exports = {
     try {
       const { id } = req.params;
       const course = await prisma.course.findUnique({
-        where: { id: Number(id) }
+        where: { id: Number(id) },
+        include: {
+          lessons: true,
+          outcomes: true
+        }
       });
       if (!course) {
         return res.status(404).json({ message: 'Course not found' });
@@ -76,3 +80,33 @@ module.exports = {
     }
   }
 };
+
+
+// Create a new course
+// hit ->  http://localhost:5000/api/courses/create
+// request body -> 
+    // {
+    //   "title": "programming with c",
+    //   "description": "This is a outstanding course to start learning programming.",
+    //   "price": 20.0,
+    //   "coverPhotoUrl": "http://localhost:5000/api/courses/photo",
+    //   "level": "BEGINNER",
+    //   "instructorId": "12345"
+    // }
+
+// Update a course
+// hit ->  http://localhost:5000/api/courses/update/id
+// request body -> 
+    // {
+    //   "title": "programming with python",
+    //   "level": "INTERMEDIATE"
+    // }
+
+// Delete a course
+// hit ->  http://localhost:5000/api/courses/delete/id
+
+// Get all courses
+// hit ->  http://localhost:5000/api/courses/all
+
+// Get a specific course by ID
+// hit ->  http://localhost:5000/api/courses/get/id

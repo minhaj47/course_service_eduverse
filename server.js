@@ -20,7 +20,7 @@ const userRoutes = require('./routes/userRoutes');
 app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/lessons', lessonRoutes);
-app.use('/api/quizzes', quizRoutes);
+app.use('/api/quizes', quizRoutes);
 app.use('/api/outcomes', outcomeRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/users', userRoutes);
