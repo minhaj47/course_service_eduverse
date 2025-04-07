@@ -13,9 +13,6 @@ exports.addLesson = async (req, res) => {
         videoUrl,
         notes,
         courseId: parseInt(courseId),
-      },
-      include: {
-        quizes: true
       }
     });
     res.status(201).json(lesson);
