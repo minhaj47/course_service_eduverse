@@ -78,7 +78,21 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching course', error });
     }
+  },
+  // get course by instructor id
+  getByInstructorId : async (req, res) => {
+    const { instructorId } = req.params;
+  
+    try {
+      const courses = await prisma.course.findMany({
+        where: { instructorId },
+      });
+      res.json(courses);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch instructor courses', details: error.message });
+    }
   }
+
 };
 
 
@@ -110,3 +124,6 @@ module.exports = {
 
 // Get a specific course by ID
 // hit ->  http://localhost:5000/api/courses/get/id
+
+// get courses by instructor id
+// hit ->  http://localhost:5000/api/courses/getByInstructorId/id 

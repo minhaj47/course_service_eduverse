@@ -14,7 +14,6 @@ const lessonRoutes = require('./routes/lessonRoutes');
 const quizRoutes = require('./routes/quizRoutes');
 const outcomeRoutes = require('./routes/outcomeRoutes');
 const searchRoutes = require('./routes/searchRoutes');
-const userRoutes = require('./routes/userRoutes');
 
 // Use routes as middleware
 app.use('/api/courses', courseRoutes);
@@ -23,7 +22,6 @@ app.use('/api/lessons', lessonRoutes);
 app.use('/api/quizes', quizRoutes);
 app.use('/api/outcomes', outcomeRoutes);
 app.use('/api/search', searchRoutes);
-app.use('/api/users', userRoutes);
 
 // Default route
 app.get('/', (req, res) => {

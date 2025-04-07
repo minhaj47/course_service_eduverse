@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prismaClient')
 
-// Search courses by title or description (basic text search)
 exports.searchCourses = async (req, res) => {
   const { query } = req.query;
 
@@ -9,14 +7,15 @@ exports.searchCourses = async (req, res) => {
     const courses = await prisma.course.findMany({
       where: {
         OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { description: { contains: query, mode: 'insensitive' } }
+          { title: { contains: query } },  // case insensitive by default
+          { description: { contains: query } }
         ]
       }
     });
 
     res.json(courses);
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({ error: 'Search failed', details: error.message });
   }
 };
@@ -57,8 +56,14 @@ exports.filterCourses = async (req, res) => {
 
 //  Example Queries
 
-// /courses/filter?level=BEGINNER&sortBy=price&sortOrder=asc
+// Search courses by title or description (basic text search)
+// hit -> get -> http://localhost:5000/api/search/courses?query=javascript
 
-// /courses/filter?minPrice=0&maxPrice=200
+// filter course
+// hit -> get -> http://localhost:5000/api/search/filter?level=BEGINNER&sortBy=price&sortOrder=asc
 
-// /courses/filter?instructorId=abc123&sortBy=createdAt
+// hit -> get -> http://localhost:5000/api/search/filter?level=BEGINNER&sortBy=price&sortOrder=desc
+
+// hit -> get -> http://localhost:5000/api/search/filter?minPrice=0&maxPrice=200
+
+// hit -> get -> http://localhost:5000/api/search/filter?sortBy=createdAt&sortOrder=desc
